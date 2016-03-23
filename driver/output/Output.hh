@@ -13,7 +13,7 @@ namespace output_addon {
             static void Init(Local<Object> exports);
         
         private:
-            explicit Output(const uint16_t& data, const uint16_t& clock, const uint16_t& latch, const uint16_t& blank);
+            explicit Output(const uint16_t& data, const uint16_t& clock, const uint16_t& latch);
             static void New(const FunctionCallbackInfo<Value>& args);
             static void Write(const FunctionCallbackInfo<Value>& args);
             static Persistent<Function> constructor;
@@ -21,7 +21,6 @@ namespace output_addon {
             const uint16_t data_;
             const uint16_t clock_;
             const uint16_t latch_;
-            const uint16_t blank_;
     };
 }
 
