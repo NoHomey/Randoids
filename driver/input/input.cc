@@ -9,8 +9,8 @@ namespace input_addon {
         args.GetReturnValue().Set(input);
     }
 
-    void Init(Local<Object> exports) {
-        NODE_SET_METHOD(exports, "input", Input);
+    void Init(Local<Object> exports, Local<Object> module) {
+        NODE_SET_METHOD(module, "exports", Input);
     }
 
     NODE_MODULE(input, Init)

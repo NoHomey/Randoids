@@ -2,7 +2,10 @@
   "targets": [
     {
       "target_name": "output",
-      "sources": [ "output.cc" ]
+      "sources": [
+        "output.cc",
+        "Output.cc"
+      ]
     }
   ]
 }

@@ -1,5 +1,3 @@
-declare module input {
-    function input(): number;
-}
+declare function input(): number;
 
 export = input;
