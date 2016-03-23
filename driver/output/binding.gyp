@@ -5,7 +5,8 @@
       "sources": [
         "output.cc",
         "Output.cc"
-      ]
+      ],
+      "ldflags": ["-lwiringPi"]
     }
   ]
 }

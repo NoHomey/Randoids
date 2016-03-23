@@ -3,7 +3,6 @@
 
 #include <node.h>
 #include <node_object_wrap.h>
-//#include <wiringPi.h>
 
 namespace output_addon {
     using namespace v8;
