@@ -1,8 +1,10 @@
 #include "Output.hh"
 #include <wiringPi.h>
+#include <iostream>
 
 namespace output_addon {
     using namespace v8;
+    using namespace std;
     
     Persistent<Function> Output::constructor;
     
@@ -23,6 +25,7 @@ namespace output_addon {
         NODE_SET_PROTOTYPE_METHOD(tmpl, "write", Write);
         constructor.Reset(isolate, tmpl->GetFunction());
         exports->Set(String::NewFromUtf8(isolate, "Output"), tmpl->GetFunction());
+        wiringPiSetup();
     }
     
     void Output::New(const FunctionCallbackInfo<Value>& args) {
@@ -40,6 +43,7 @@ namespace output_addon {
         for(unsigned int i = 0;i < arr->Length(); ++i) {
             Local<Value> item = arr->Get(i);
             uint32_t value = item->ToUint32()->Value();
+	    cout << value << endl;
             for (int8_t bit = 11; bit >=0 ; --bit) {
                 digitalWrite(obj->clock_, LOW);
                 digitalWrite(obj->data_, ((value & (1 << bit)) ? HIGH : LOW));
