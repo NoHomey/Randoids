@@ -40,10 +40,10 @@ namespace output_addon {
     void Output::Write(const FunctionCallbackInfo<Value>& args) {
         Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
         Local<Uint16Array> arr = Local<Uint16Array>::Cast(args[0]);
-        for(unsigned int i = 0;i < arr->Length(); ++i) {
+        for(unsigned int i = arr->Length() - 1;i >= 0; --i) {
             Local<Value> item = arr->Get(i);
             uint32_t value = item->ToUint32()->Value();
-	    cout << value << endl;
+            cout << i << ": " << value << endl;
             for (int8_t bit = 11; bit >=0 ; --bit) {
                 digitalWrite(obj->clock_, LOW);
                 digitalWrite(obj->data_, ((value & (1 << bit)) ? HIGH : LOW));
