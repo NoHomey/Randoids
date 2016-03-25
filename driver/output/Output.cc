@@ -4,6 +4,7 @@
 
 namespace output_addon {
     #define LEDS 24
+    #define MAXPWM 4095
     using namespace v8;
     using namespace std;
     
@@ -74,16 +75,25 @@ namespace output_addon {
         digitalWrite(obj->latch_, LOW);
     }
     
-    void Output::SetLED(const FunctionCallbackInfo<Value>& args) {
-        Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
-        uint16_t led = args[0]->ToUint32()->Value();
-        uint16_t pwm = args[1]->ToUint32()->Value();
+    void Output::SetLED(const FunctionCallbackInfo<Value>& args, const uint8_t& led, const uint16_t& pwm) {
+        Isolate* isolate = args.GetIsolate();
         if(led >= obj->maxLEDs) {
-            Isolate* isolate = args.GetIsolate();
             isolate->ThrowException(Exception::Error(String::NewFromUtf8(isolate, "LED number must be between [0 and 24 * number of chips)")));
             return;
         }
-        obj->buffer_[led] = pwm;
+        if(pwm > MAXPWM) {
+            isolate->ThrowException(Exception::Error(String::NewFromUtf8(isolate, "LED pwm value must be between [0 and 4095)")));
+            return;
+        }
+        obj->buffer_[led] = pwm;       
+    }
+    
+    void Output::SetLED(const FunctionCallbackInfo<Value>& args) {
+        Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
+        Isolate* isolate = args.GetIsolate();
+        uint16_t led = args[0]->ToUint32()->Value();
+        uint16_t pwm = args[1]->ToUint32()->Value();
+        SetLED(args, led, pwm);
     }
     
     void Output::SetRGBLED(const FunctionCallbackInfo<Value>& args) {
@@ -96,8 +106,8 @@ namespace output_addon {
             return;
         }
         rgb *= 3;
-        obj->buffer_[rgb + obj->red] = pwm->Get(obj->red)->ToUint32()->Value();
-        obj->buffer_[rgb + obj->green] = pwm->Get(obj->green)->ToUint32()->Value();
-        obj->buffer_[rgb + obj->blue] = pwm->Get(obj->blue)->ToUint32()->Value();
+        setLED(args, rgb + obj->red, pwm->Get(obj->red)->ToUint32()->Value());
+        setLED(args, rgb + obj->blue, pwm->Get(obj->blue)->ToUint32()->Value());
+        setLED(args, rgb + obj->green, pwm->Get(obj->green)->ToUint32()->Value());
     }
 }
