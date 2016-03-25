@@ -75,7 +75,7 @@ namespace output_addon {
         digitalWrite(obj->latch_, LOW);
     }
     
-    void Output::SetLED(const FunctionCallbackInfo<Value>& args, const uint8_t& led, const uint16_t& pwm) {
+    void Output::SetLED(Object* obj, const FunctionCallbackInfo<Value>& args, const uint8_t& led, const uint16_t& pwm) {
         Isolate* isolate = args.GetIsolate();
         if(led >= obj->maxLEDs) {
             isolate->ThrowException(Exception::Error(String::NewFromUtf8(isolate, "LED number must be between [0 and 24 * number of chips)")));
@@ -93,7 +93,7 @@ namespace output_addon {
         Isolate* isolate = args.GetIsolate();
         uint16_t led = args[0]->ToUint32()->Value();
         uint16_t pwm = args[1]->ToUint32()->Value();
-        SetLED(args, led, pwm);
+        SetLED(obj, args, led, pwm);
     }
     
     void Output::SetRGBLED(const FunctionCallbackInfo<Value>& args) {
@@ -106,8 +106,8 @@ namespace output_addon {
             return;
         }
         rgb *= 3;
-        setLED(args, rgb + obj->red, pwm->Get(obj->red)->ToUint32()->Value());
-        setLED(args, rgb + obj->blue, pwm->Get(obj->blue)->ToUint32()->Value());
-        setLED(args, rgb + obj->green, pwm->Get(obj->green)->ToUint32()->Value());
+        SetLED(obj, args, rgb + obj->red, pwm->Get(obj->red)->ToUint32()->Value());
+        SetLED(obj, args, rgb + obj->blue, pwm->Get(obj->blue)->ToUint32()->Value());
+        SetLED(obj, args, rgb + obj->green, pwm->Get(obj->green)->ToUint32()->Value());
     }
 }
