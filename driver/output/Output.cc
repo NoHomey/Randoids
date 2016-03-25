@@ -42,7 +42,7 @@ namespace output_addon {
     
     void Output::ThrowError(const FunctionCallbackInfo<Value>& args, const invalid_argument& error) {
         Isolate* isolate = args.GetIsolate();
-        isolate->ThrowException(Exception::Error(String::NewFromUtf8(isolate, error.what()));   
+        isolate->ThrowException(Exception::Error(String::NewFromUtf8(isolate, error.what())));   
     }
     
     void Output::Write(const FunctionCallbackInfo<Value>& args) {
@@ -68,9 +68,9 @@ namespace output_addon {
             Local<Uint16Array> array = Local<Uint16Array>::Cast(args[1]);
             uint16_t pwm[3];
             for(uint8_t i = 0; i < 3; ++i) {
-                pwm[i] = array->Get(i)->ToUint32()->Value());
+                pwm[i] = array->Get(i)->ToUint32()->Value();
             }
-            obj->tlc5947_.setRGBLED(led, pwm);
+            obj->tlc5947_.setRGBLED(rgb, pwm);
         } catch (const invalid_argument& error) {
             ThrowError(args, error);
         }

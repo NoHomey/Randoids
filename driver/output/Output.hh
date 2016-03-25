@@ -3,8 +3,8 @@
 
 #include <node.h>
 #include <node_object_wrap.h>
-#include <exception>
-#include "TLC5947"
+#include <stdexcept>
+#include "TLC5947.hh"
 
 namespace output_addon {
     using namespace v8;
@@ -15,7 +15,7 @@ namespace output_addon {
             static void Init(Local<Object> exports);
         
         private:
-            explicit Output(const uint8_t& num, const uint16_t& data, const uint16_t& clock, const uint16_t& latch, const char* wire);
+            explicit Output(const uint8_t& num, const uint16_t& data, const uint16_t& clock, const uint16_t& latch);
             static void New(const FunctionCallbackInfo<Value>& args);
             static void Setup(const FunctionCallbackInfo<Value>& args);
             static void ThrowError(const FunctionCallbackInfo<Value>& args, const std::invalid_argument& error);
