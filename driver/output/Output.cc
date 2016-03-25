@@ -14,9 +14,9 @@ namespace output_addon {
     : chips(num),
       maxLEDs(num * LEDS),
       maxRGBLEDs(num * LEDS / 3),
-      red(0),
-      green(1),
-      blue(2),
+      red(1),
+      green(2),
+      blue(0),
       data_(data),
       clock_(clock),
       latch_(latch),
@@ -25,13 +25,13 @@ namespace output_addon {
         pinMode(clock, OUTPUT);
         pinMode(latch, OUTPUT);
         string wiring = string(wire);
-        uint8_t* ptr;
+       /*uint8_t* ptr;
         ptr = (uint8_t*)(&red);
         *ptr = wiring.find('R');
         ptr = (uint8_t*)(&green);
         *ptr = wiring.find('G');
         ptr = (uint8_t*)(&blue);
-        *ptr = wiring.find('B');
+        *ptr = wiring.find('B');*/
     }
     
     Output::~Output() {}
@@ -64,6 +64,7 @@ namespace output_addon {
         Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
         digitalWrite(obj->latch_, LOW);
         for(int16_t i = obj->maxLEDs - 1;i >= 0; --i) {
+            cout << i << " " << obj->buffer_[i] << endl;
             for (int8_t bit = 11; bit >=0 ; --bit) {
                 digitalWrite(obj->clock_, LOW);
                 digitalWrite(obj->data_, ((obj->buffer_[i] & (1 << bit)) ? HIGH : LOW));
@@ -75,13 +76,14 @@ namespace output_addon {
         digitalWrite(obj->latch_, LOW);
     }
     
-    void Output::SetLED(Object* obj, const FunctionCallbackInfo<Value>& args, const uint8_t& led, const uint16_t& pwm) {
-        Isolate* isolate = args.GetIsolate();
+    void Output::SetLED(Output* obj, const FunctionCallbackInfo<Value>& args, const uint8_t& led, const uint16_t& pwm) {
         if(led >= obj->maxLEDs) {
+            Isolate* isolate = args.GetIsolate();
             isolate->ThrowException(Exception::Error(String::NewFromUtf8(isolate, "LED number must be between [0 and 24 * number of chips)")));
             return;
         }
         if(pwm > MAXPWM) {
+            Isolate* isolate = args.GetIsolate();
             isolate->ThrowException(Exception::Error(String::NewFromUtf8(isolate, "LED pwm value must be between [0 and 4095)")));
             return;
         }
@@ -90,7 +92,6 @@ namespace output_addon {
     
     void Output::SetLED(const FunctionCallbackInfo<Value>& args) {
         Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
-        Isolate* isolate = args.GetIsolate();
         uint16_t led = args[0]->ToUint32()->Value();
         uint16_t pwm = args[1]->ToUint32()->Value();
         SetLED(obj, args, led, pwm);
