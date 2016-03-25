@@ -15,15 +15,22 @@ namespace output_addon {
       clock_(clock),
       latch_(latch),
       maxLEDs(num * LEDS),
-      maxRGBs(num * LEDS / 3),
-      buffer_(new uint16_t[num * LEDS]) {
+      maxRGBLEDSs(num * LEDS / 3),
+      buffer_(new uint16_t[num * LEDS]),
+      red(0),
+      green(1),
+      blue(2) {
         pinMode(data, OUTPUT);
         pinMode(clock, OUTPUT);
         pinMode(latch, OUTPUT);
         string wiring = string(wire);
-        red = wiring.find('R');
-        green = wiring.find('G');
-        blue = wiring.find('B');
+        uint8_t* ptr;
+        ptr = (uint8_t*) &red
+        *ptr = wiring.find('R');
+        ptr = (uint8_t*) &green
+        *ptr = wiring.find('G');
+        ptr = (uint8_t*) &blue;
+        *ptr = wiring.find('B');
     }
     
     Output::~Output() {}
@@ -46,7 +53,7 @@ namespace output_addon {
         uint16_t data = args[1]->ToUint32()->Value();
         uint16_t clock = args[2]->ToUint32()->Value();
         uint16_t latch = args[3]->ToUint32()->Value();
-        char* wire = *(String::AsciiValue(args[4]->ToString()));
+        char* wire = *(String::Utf8Value(args[4]->ToString()));
         Output* obj = new Output(chips, data, clock, latch, wire);
         obj->Wrap(args.This());
         args.GetReturnValue().Set(args.This());
@@ -80,6 +87,7 @@ namespace output_addon {
     }
     
     void Output::SetRGBLED(const FunctionCallbackInfo<Value>& args) {
+        Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
         uint16_t rgb = args[0]->ToUint32()->Value();
         Local<Uint16Array> pwm = Local<Uint16Array>::Cast(args[1]);
         if(rgb >= obj->maxRGBLEDs) {
@@ -88,8 +96,8 @@ namespace output_addon {
             return;
         }
         rgb *= 3;
-        obj->buffer_[rgb + red] = pwm->Get(red)->ToUint32()->Value();
-        obj->buffer_[rgb + green] = pwm->Get(green)->ToUint32()->Value();
-        obj->buffer_[rgb + blue] = pwm->Get(blue)->ToUint32()->Value();
+        obj->buffer_[rgb + obj->red] = pwm->Get(obj->red)->ToUint32()->Value();
+        obj->buffer_[rgb + obj->green] = pwm->Get(obj->green)->ToUint32()->Value();
+        obj->buffer_[rgb + obj->blue] = pwm->Get(obj->blue)->ToUint32()->Value();
     }
 }
