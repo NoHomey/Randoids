@@ -11,25 +11,25 @@ namespace output_addon {
     
     Output::Output(const uint8_t& num, const uint16_t& data, const uint16_t& clock, const uint16_t& latch, const char* wire)
     : chips(num),
+      maxLEDs(num * LEDS),
+      maxRGBLEDs(num * LEDS / 3),
+      red(0),
+      green(1),
+      blue(2),
       data_(data),
       clock_(clock),
       latch_(latch),
-      maxLEDs(num * LEDS),
-      maxRGBLEDSs(num * LEDS / 3),
-      buffer_(new uint16_t[num * LEDS]),
-      red(0),
-      green(1),
-      blue(2) {
+      buffer_(new uint16_t[num * LEDS]) {
         pinMode(data, OUTPUT);
         pinMode(clock, OUTPUT);
         pinMode(latch, OUTPUT);
         string wiring = string(wire);
         uint8_t* ptr;
-        ptr = (uint8_t*) &red
+        ptr = (uint8_t*)(&red);
         *ptr = wiring.find('R');
-        ptr = (uint8_t*) &green
+        ptr = (uint8_t*)(&green);
         *ptr = wiring.find('G');
-        ptr = (uint8_t*) &blue;
+        ptr = (uint8_t*)(&blue);
         *ptr = wiring.find('B');
     }
     
