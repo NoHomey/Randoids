@@ -60,7 +60,7 @@ namespace output_addon {
         args.GetReturnValue().Set(args.This());
     }
     
-    bool ThrowError(const uint16_t& checked, const uint16_t& compared, const FunctionCallbackInfo<Value>& args, const char* message) {
+    bool Output::ThrowError(const uint16_t& checked, const uint16_t& compared, const FunctionCallbackInfo<Value>& args, const char* message) {
         if(checked >= compared) {
             Isolate* isolate = args.GetIsolate();
             isolate->ThrowException(Exception::Error(String::NewFromUtf8(isolate, message)));
@@ -104,7 +104,7 @@ namespace output_addon {
         Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
         uint16_t rgb = args[0]->ToUint32()->Value();
         Local<Uint16Array> pwm = Local<Uint16Array>::Cast(args[1]);
-        if(!ThrowError(led, obj->maxRGBLEDs, args, "RGB number must be between [0 and 8 * number of chips)")) {
+        if(!ThrowError(rgb, obj->maxRGBLEDs, args, "RGB number must be between [0 and 8 * number of chips)")) {
             rgb *= 3;
             SetLED(obj, args, rgb + obj->red, pwm->Get(obj->red)->ToUint32()->Value());
             SetLED(obj, args, rgb + obj->blue, pwm->Get(obj->blue)->ToUint32()->Value());
