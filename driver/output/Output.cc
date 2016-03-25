@@ -60,6 +60,15 @@ namespace output_addon {
         args.GetReturnValue().Set(args.This());
     }
     
+    bool ThrowError(const uint16_t& checked, const uint16_t& compared, const FunctionCallbackInfo<Value>& args, const char* message) {
+        if(checked >= compared) {
+            Isolate* isolate = args.GetIsolate();
+            isolate->ThrowException(Exception::Error(String::NewFromUtf8(isolate, message)));
+            return true;
+        }
+        return false;    
+    }
+    
     void Output::Write(const FunctionCallbackInfo<Value>& args) {
         Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
         digitalWrite(obj->latch_, LOW);
@@ -77,17 +86,11 @@ namespace output_addon {
     }
     
     void Output::SetLED(Output* obj, const FunctionCallbackInfo<Value>& args, const uint8_t& led, const uint16_t& pwm) {
-        if(led >= obj->maxLEDs) {
-            Isolate* isolate = args.GetIsolate();
-            isolate->ThrowException(Exception::Error(String::NewFromUtf8(isolate, "LED number must be between [0 and 24 * number of chips)")));
-            return;
-        }
-        if(pwm > MAXPWM) {
-            Isolate* isolate = args.GetIsolate();
-            isolate->ThrowException(Exception::Error(String::NewFromUtf8(isolate, "LED pwm value must be between [0 and 4095)")));
-            return;
-        }
-        obj->buffer_[led] = pwm;       
+        if(!ThrowError(led, obj->maxLEDs, args, "LED number must be between [0 and 24 * number of chips)")) {
+            if(!ThrowError(pwm, MAXPWM, args, "LED pwm value must be between [0 and 4095)")) {
+                obj->buffer_[led] = pwm;
+            }
+        }       
     }
     
     void Output::SetLED(const FunctionCallbackInfo<Value>& args) {
@@ -101,14 +104,11 @@ namespace output_addon {
         Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
         uint16_t rgb = args[0]->ToUint32()->Value();
         Local<Uint16Array> pwm = Local<Uint16Array>::Cast(args[1]);
-        if(rgb >= obj->maxRGBLEDs) {
-            Isolate* isolate = args.GetIsolate();
-            isolate->ThrowException(Exception::Error(String::NewFromUtf8(isolate, "RGB number must be between [0 and 8 * number of chips)")));
-            return;
+        if(!ThrowError(led, obj->maxRGBLEDs, args, "RGB number must be between [0 and 8 * number of chips)")) {
+            rgb *= 3;
+            SetLED(obj, args, rgb + obj->red, pwm->Get(obj->red)->ToUint32()->Value());
+            SetLED(obj, args, rgb + obj->blue, pwm->Get(obj->blue)->ToUint32()->Value());
+            SetLED(obj, args, rgb + obj->green, pwm->Get(obj->green)->ToUint32()->Value());
         }
-        rgb *= 3;
-        SetLED(obj, args, rgb + obj->red, pwm->Get(obj->red)->ToUint32()->Value());
-        SetLED(obj, args, rgb + obj->blue, pwm->Get(obj->blue)->ToUint32()->Value());
-        SetLED(obj, args, rgb + obj->green, pwm->Get(obj->green)->ToUint32()->Value());
     }
 }

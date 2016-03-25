@@ -21,6 +21,7 @@ namespace output_addon {
         private:
             explicit Output(const uint8_t& num, const uint16_t& data, const uint16_t& clock, const uint16_t& latch, const char* wire);
             static void New(const FunctionCallbackInfo<Value>& args);
+            static bool ThrowError(const uint16_t& checked, const uint16_t& compared, const FunctionCallbackInfo<Value>& args, const char* message);
             static void Write(const FunctionCallbackInfo<Value>& args);
             static void SetLED(const FunctionCallbackInfo<Value>& args);
             static void SetLED(Output* obj, const FunctionCallbackInfo<Value>& args, const uint8_t& led, const uint16_t& pwm);
