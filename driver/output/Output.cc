@@ -6,8 +6,8 @@ namespace output_addon {
     
     Persistent<Function> Output::constructor;
     
-    Output::Output(const uint8_t& chips, const uint8_t& data, const uint8_t& clock, const uint8_t& latch)
-    : TLC5947(chips, data, clock, latch) {}
+    Output::Output(const uint8_t& chips, const uint8_t& data, const uint8_t& clock, const uint8_t& latch, const char* wiring)
+    : TLC5947(chips, data, clock, latch, wiring) {}
         
     Output::~Output() {}
     
@@ -29,8 +29,8 @@ namespace output_addon {
         uint8_t data = args[1]->ToUint32()->Value();
         uint8_t clock = args[2]->ToUint32()->Value();
         uint8_t latch = args[3]->ToUint32()->Value();
-        //char* wire = *(String::Utf8Value(args[4]->ToString()));
-        Output* obj = new Output(chips, data, clock, latch);
+        char* wiring = *(String::Utf8Value(args[4]->ToString()));
+        Output* obj = new Output(chips, data, clock, latch, wiring);
         obj->Wrap(args.This());
         args.GetReturnValue().Set(args.This());
     }

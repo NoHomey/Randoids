@@ -6,8 +6,15 @@
 #define LEDS 24
 #define MAXPWM 4096
 
-TLC5947::TLC5947(const uint8_t& chips, const uint8_t& data, const uint8_t& clock, const uint8_t& latch)
-: buffer_(new uint16_t[chips * LEDS]), chips_(chips), data_(data), clock_(clock), latch_(latch)
+TLC5947::RGB::RGB(const char* wiring) {
+    std::string buffer = std::string(wiring);
+    red = buffer.find('R');
+    green = buffer.find('G');
+    blue = buffer.find('B');
+}
+
+TLC5947::TLC5947(const uint8_t& chips, const uint8_t& data, const uint8_t& clock, const uint8_t& latch, const char* wiring)
+: buffer_(new uint16_t[chips * LEDS]), chips_(chips), data_(data), clock_(clock), latch_(latch), wiring_(RGB(wiring))
 {}
 
 TLC5947::~TLC5947(void) {
@@ -56,9 +63,9 @@ void TLC5947::setRGBLED(const uint16_t& rgb, const uint16_t* pwm) {
     const char* method =  "setRGBLED";
     throwOutOfRangeError(rgb, LEDS * chips_ / 3, "RGB number must be between [0 and 8 * number of chips)", method);
     uint16_t led = rgb * 3;
-    setLED(led, pwm[2], method);
-    setLED(led + 1, pwm[0], method);
-    setLED(led + 2, pwm[1], method);
+    setLED(led, pwm[wiring_.red], method);
+    setLED(led + 1, pwm[wiring_.green], method);
+    setLED(led + 2, pwm[wiring_.blue], method);
 }
 
 void TLC5947::setup(void) {

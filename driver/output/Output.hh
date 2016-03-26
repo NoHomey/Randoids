@@ -15,7 +15,7 @@ namespace output_addon {
             static void Init(Local<Object> exports);
         
         private:
-            explicit Output(const uint8_t& chips, const uint8_t& data, const uint8_t& clock, const uint8_t& latch);
+            explicit Output(const uint8_t& chips, const uint8_t& data, const uint8_t& clock, const uint8_t& latch, const char* wiring);
             static void New(const FunctionCallbackInfo<Value>& args);
             static void Setup(const FunctionCallbackInfo<Value>& args);
             static void ThrowError(const FunctionCallbackInfo<Value>& args, const std::out_of_range& error);
