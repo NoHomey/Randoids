@@ -13,17 +13,18 @@ class TLC5947 {
         void setup(void);
 
     private:
-        uint16_t* buffer_;
-        const uint8_t chips_, data_, clock_, latch_;
-        const RGB wiring_;
-        static void throwOutOfRangeError(const uint16_t& checked, const uint16_t& compared, const char* message, const char* method);
-        
-        struct RGB {
+
+       struct RGB {
             uint8_t red;
             uint8_t green;
             uint8_t blue;
             RGB(const char* wiring);
         };
+
+        uint16_t* buffer_;
+        const uint8_t chips_, data_, clock_, latch_;
+        const TLC5947::RGB wiring_;
+        static void throwOutOfRangeError(const uint16_t& checked, const uint16_t& compared, const char* message, const char* method);
 };
 
 #endif

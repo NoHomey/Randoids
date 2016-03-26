@@ -29,8 +29,8 @@ namespace output_addon {
         uint8_t data = args[1]->ToUint32()->Value();
         uint8_t clock = args[2]->ToUint32()->Value();
         uint8_t latch = args[3]->ToUint32()->Value();
-        char* wiring = *(String::Utf8Value(args[4]->ToString()));
-        Output* obj = new Output(chips, data, clock, latch, wiring);
+	String::Utf8Value utf8(args[4]->ToString());
+        Output* obj = new Output(chips, data, clock, latch, *utf8);
         obj->Wrap(args.This());
         args.GetReturnValue().Set(args.This());
     }

@@ -2,6 +2,7 @@
 #include <wiringPi.h>
 #include <stdexcept>
 #include <string>
+#include <iostream>
 
 #define LEDS 24
 #define MAXPWM 4096
@@ -63,9 +64,9 @@ void TLC5947::setRGBLED(const uint16_t& rgb, const uint16_t* pwm) {
     const char* method =  "setRGBLED";
     throwOutOfRangeError(rgb, LEDS * chips_ / 3, "RGB number must be between [0 and 8 * number of chips)", method);
     uint16_t led = rgb * 3;
-    setLED(led, pwm[wiring_.red], method);
-    setLED(led + 1, pwm[wiring_.green], method);
-    setLED(led + 2, pwm[wiring_.blue], method);
+    setLED(led + wiring_.red, pwm[0], method);
+    setLED(led + wiring_.green, pwm[1], method);
+    setLED(led + wiring_.blue, pwm[2], method);
 }
 
 void TLC5947::setup(void) {
