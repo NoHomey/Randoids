@@ -15,7 +15,7 @@ class TLC5947 {
     private:
         uint16_t* buffer_;
         const uint8_t chips_, data_, clock_, latch_;
-        void throwError(const uint16_t& checked, const uint16_t& compared, const char* message);
+        void throwOutOfRangeError(const uint16_t& checked, const uint16_t& compared, const char* message, const char* method);
 };
 
 #endif

@@ -15,10 +15,10 @@ namespace output_addon {
             static void Init(Local<Object> exports);
         
         private:
-            explicit Output(const uint16_t& chips, const uint8_t& data, const uint8_t& clock, const uint8_t& latch);
+            explicit Output(const uint8_t& chips, const uint8_t& data, const uint8_t& clock, const uint8_t& latch);
             static void New(const FunctionCallbackInfo<Value>& args);
             static void Setup(const FunctionCallbackInfo<Value>& args);
-            static void ThrowError(const FunctionCallbackInfo<Value>& args, const std::invalid_argument& error);
+            static void ThrowError(const FunctionCallbackInfo<Value>& args, const std::out_of_range& error);
             static void Write(const FunctionCallbackInfo<Value>& args);
             static void SetLED(const FunctionCallbackInfo<Value>& args);
             static void SetRGBLED(const FunctionCallbackInfo<Value>& args);

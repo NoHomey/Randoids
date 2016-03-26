@@ -6,7 +6,7 @@ namespace output_addon {
     
     Persistent<Function> Output::constructor;
     
-    Output::Output(const uint16_t& chips, const uint8_t& data, const uint8_t& clock, const uint8_t& latch)
+    Output::Output(const uint8_t& chips, const uint8_t& data, const uint8_t& clock, const uint8_t& latch)
     : TLC5947(chips, data, clock, latch) {}
         
     Output::~Output() {}
@@ -25,7 +25,7 @@ namespace output_addon {
     }
     
     void Output::New(const FunctionCallbackInfo<Value>& args) {
-        uint16_t chips = args[0]->ToUint32()->Value();
+        uint8_t chips = args[0]->ToUint32()->Value();
         uint8_t data = args[1]->ToUint32()->Value();
         uint8_t clock = args[2]->ToUint32()->Value();
         uint8_t latch = args[3]->ToUint32()->Value();
@@ -40,7 +40,7 @@ namespace output_addon {
         obj->setup();
     }
     
-    void Output::ThrowError(const FunctionCallbackInfo<Value>& args, const invalid_argument& error) {
+    void Output::ThrowError(const FunctionCallbackInfo<Value>& args, const out_of_range& error) {
         Isolate* isolate = args.GetIsolate();
         isolate->ThrowException(Exception::Error(String::NewFromUtf8(isolate, error.what())));   
     }
@@ -56,7 +56,7 @@ namespace output_addon {
             uint16_t pwm = args[1]->ToUint32()->Value();
             Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
             obj->setLED(led, pwm);
-        } catch (const invalid_argument& error) {
+        } catch (const out_of_range& error) {
             ThrowError(args, error);
         }
     }
@@ -71,7 +71,7 @@ namespace output_addon {
                 pwm[i] = array->Get(i)->ToUint32()->Value();
             }
             obj->setRGBLED(rgb, pwm);
-        } catch (const invalid_argument& error) {
+        } catch (const out_of_range& error) {
             ThrowError(args, error);
         }
     }

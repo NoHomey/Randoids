@@ -1,7 +1,7 @@
 #include "TLC5947.hh"
 #include <wiringPi.h>
 #include <stdexcept>
-#include <iostream>
+#include <string> 
 
 #define LEDS 24
 #define MAXPWM 4096
@@ -38,21 +38,22 @@ void TLC5947::write(void) {
     digitalWrite(latch_, LOW);
 }
 
-void TLC5947::throwError(const uint16_t& checked, const uint16_t& compared, const char* message) {
+void TLC5947::throwOutOfRangeError(const uint16_t& checked, const uint16_t& compared, const char* message, const char* method) {
     if(checked >= compared) {
-        std::cout << "called with: " << checked << " and " << compared << std::endl;
-        throw std::invalid_argument(message);
+        std::string formatted = std::string(message);
+        formated += "when calling '" + method + "' with " + std::to_string(cheked) + std::endl;
+        throw std::out_of_range(formated);
     }
 }
 
 void TLC5947::setLED(const uint16_t& led, const uint16_t& pwm) {
-    throwError(led, LEDS * chips_, "LED number must be between [0 and 24 * number of chips)");
-    throwError(pwm, MAXPWM, "LED pwm value must be between [0 and 4095)");
+    throwOutOfRangeError(led, LEDS * chips_, "LED number must be between [0 and 24 * number of chips)");
+    throwOutOfRangeError(pwm, MAXPWM, "LED pwm value must be between [0 and 4095)", "setLED");
     buffer_[led] = pwm;
 }
 
 void TLC5947::setRGBLED(const uint16_t& rgb, const uint16_t* pwm) {
-    throwError(rgb, LEDS * chips_ / 3, "RGB number must be between [0 and 8 * number of chips)");
+    throwOutOfRangeError(rgb, LEDS * chips_ / 3, "RGB number must be between [0 and 8 * number of chips)", "setRGBLED");
     uint16_t led = rgb * 3;
     setLED(led, pwm[2]);
     setLED(led + 1, pwm[0]);
