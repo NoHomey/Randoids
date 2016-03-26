@@ -1,4 +1,4 @@
-import wiringPiSetup = require('./driver/setup/setup');
+import wiringPiSetup = require('./driver/wiringPiSetup/wiringPiSetup');
 import output = require('./driver/output/output');
 import input = require('./driver/input/input');
 
