@@ -25,11 +25,11 @@ var spaceShip: Pixel[] = [
     new Pixel(color.Color.Blue, new Position(0, -1)),
     new Pixel(color.Color.Blue, new Position(1, 0))
 ];
-var player: GameObject = new GameObject(new Position(3, 0), new Position(0, 0), spaceShip);
+var player: GameObject = new GameObject(new Position(3, 4), new Position(0, 0), spaceShip);
 
 function updateScreen(): void {
     for(var i: number = 0; i < screen.length; ++i) {
-        out.setRGBLED(i, color.ColorToUint16Array(screen[i]);
+        out.setRGBLED(i, color.ColorToUint16Array(screen[i]));
     }
     out.write();   
 }
@@ -41,24 +41,39 @@ function readInput(): Position {
     var right: number = (buttons & 4) ? 1 : 0;
     var x: number = left - right;
     shoot = Boolean(buttons & 2);
+    console.log(x);
     return new Position(x, 0);
 }
 
 function move(object: GameObject) {
     for(var i: number = 0; i < object.figure.length; ++i) {
-        out.clearRGBLED(object.figure[i].position.toNumber());
+        var old: Position = object.figure[i].position.add(object.position);
+        out.clearRGBLED(old.toNumber());
     }
     var updated: Pixel[] = object.progress(object.position);
     for(var i: number = 0; i < updated.length; ++i) {
-        screen[updated[i].position.toNumber()] = updated[i].color;
+        var pixel: number = updated[i].position.toNumber();
+        console.log(pixel);
+        screen[pixel] = updated[i].color;
     }
 }
+
+function clearScreen(): void {
+    for(var i: number = 0; i < screen.length; ++i) {
+        screen[i] = color.Color.Black;
+    }
+    updateScreen();
+}
+
+clearScreen();
+move(player);
+updateScreen();
 
 setInterval(() => {
     player.direction = readInput();
     player.position.add(player.direction);
     move(player);
     updateScreen();
-}, 6000);
+}, 1000);
 
 

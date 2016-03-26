@@ -15,8 +15,7 @@ namespace output_addon {
         Isolate* isolate = exports->GetIsolate();
         Local<FunctionTemplate> tmpl = FunctionTemplate::New(isolate, New);
         tmpl->SetClassName(String::NewFromUtf8(isolate, "Output"));
-        tmpl->InstanceTemplate()->SetInternalFieldCount(6);
-        NODE_SET_PROTOTYPE_METHOD(tmpl, "setup", Setup);
+        tmpl->InstanceTemplate()->SetInternalFieldCount(5);
         NODE_SET_PROTOTYPE_METHOD(tmpl, "write", Write);
         NODE_SET_PROTOTYPE_METHOD(tmpl, "setLED", SetLED);
         NODE_SET_PROTOTYPE_METHOD(tmpl, "setRGBLED", SetRGBLED);
