@@ -1,4 +1,4 @@
-all: clean output input setup transpile run
+all: clean output input wiringPiSetup transpile run
 
 output:
 	cd driver/output && make
@@ -6,8 +6,8 @@ output:
 input:
 	cd driver/input && make
     
-setup:
-	cd driver/setup && make
+wiringPiSetup:
+	cd driver/wiringPiSetup && make
 
 transpile:
 	tsc -m commonjs main.ts

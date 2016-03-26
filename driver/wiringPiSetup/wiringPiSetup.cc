@@ -12,5 +12,5 @@ namespace wiringPiSetup_addon {
         NODE_SET_METHOD(module, "exports", WiringPiSetup);
     }
 
-    NODE_MODULE(wiringPiSetup, WiringPiSetup)
+    NODE_MODULE(wiringPiSetup, Init)
 }
