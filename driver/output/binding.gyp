@@ -5,7 +5,7 @@
       "sources": [
         "output.cc",
         "Output.cc",
-	"TLC5947.cc"
+        "TLC5947.cc"
       ],
       "ldflags": ["-lwiringPi"],
       "cflags!": ["-fno-exceptions"],

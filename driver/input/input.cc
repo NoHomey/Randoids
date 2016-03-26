@@ -1,9 +1,11 @@
 #include <node.h>
+#include <wiringPi.h>
 
 namespace input_addon {
     using namespace v8;
     
     void Input(const FunctionCallbackInfo<Value>& args) {
+        wiringPiSetup();
         Isolate* isolate = args.GetIsolate();
         Local<Number> input = Number::New(isolate, 2);
         args.GetReturnValue().Set(input);
