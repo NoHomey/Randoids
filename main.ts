@@ -26,7 +26,7 @@ setTimeout(() => {
 var buttons: number = input();*/
 
 import Position = require('./game/Position');
+import color = require('./game/Color');
+
 Position.setDirectionMax(8);
 
-var p: Position = new Position(1, 2);
-p.x = 8;

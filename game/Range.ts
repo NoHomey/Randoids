@@ -8,7 +8,7 @@ class Range {
     }
     
     public isInRange(num: number): boolean {
-        return (num >= this.from_ && num <= this.to_);
+        return Boolean(num >= this.from_ && num <= this.to_);
     }
     
     public notInRange(num: number): boolean {
