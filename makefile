@@ -1,10 +1,13 @@
-all: clean output input transpile run
+all: clean output input setup transpile run
 
 output:
 	cd driver/output && make
 
 input:
-	cd driver/input && make 
+	cd driver/input && make
+    
+setup:
+	cd driver/setup && make
 
 transpile:
 	tsc -m commonjs main.ts
