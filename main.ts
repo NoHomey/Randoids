@@ -25,7 +25,7 @@ var spaceShip: Pixel[] = [
     new Pixel(color.Color.Blue, new Position(0, -1)),
     new Pixel(color.Color.Blue, new Position(1, 0))
 ];
-var player: GameObject = new GameObject(new Position(3, 4), new Position(0, 0), spaceShip);
+var player: GameObject = new GameObject(new Position(0, 4), new Position(0, 0), spaceShip);
 
 function updateScreen(): void {
     for(var i: number = 0; i < screen.length; ++i) {
@@ -39,17 +39,15 @@ function readInput(): Position {
     var buttons: number = input();
     var left: number = (buttons & 1) ? 1 : 0;
     var right: number = (buttons & 4) ? 1 : 0;
-    var x: number = left - right;
+    var y: number = left - right;
     shoot = Boolean(buttons & 2);
-    console.log(x);
-    return new Position(x, 0);
+    return new Position(0, y);
 }
 
-function update(object: GainNode, clear: boolean) {
+function update(object: GameObject, clear: boolean) {
     var updated: Pixel[] = object.progress(object.position);
     for(var i: number = 0; i < updated.length; ++i) {
         var pixel: number = updated[i].position.toNumber();
-        console.log(pixel);
         screen[pixel] = clear ? color.Color.Black : updated[i].color;
     }  
 }
@@ -71,4 +69,4 @@ setInterval(() => {
     player.position = player.position.add(player.direction);
     update(player, false);
     updateScreen();
-}, 1000);
+}, 300);
