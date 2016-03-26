@@ -7,7 +7,7 @@ class TLC5947 {
     public:
         TLC5947(const uint8_t& chips, const uint8_t& data, const uint8_t& clock, const uint8_t& latch);
         ~TLC5947(void);
-        void setLED(const uint16_t& led, const uint16_t& pwm, const char* method);
+        void setLED(const uint16_t& led, const uint16_t& pwm, const char* method = "setLED");
         void setRGBLED(const uint16_t& rgb, const uint16_t* pwm);
         void write(void);
         void setup(void);

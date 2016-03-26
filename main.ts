@@ -13,4 +13,4 @@ out.setup();
 }
 out.write();
 */
-out.setRGBLED(70, [5000, 0, 0]);
+out.setLED(3000, 5000);

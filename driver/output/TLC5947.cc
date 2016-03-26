@@ -1,7 +1,7 @@
 #include "TLC5947.hh"
 #include <wiringPi.h>
 #include <stdexcept>
-#include <string> 
+#include <string>
 
 #define LEDS 24
 #define MAXPWM 4096
@@ -41,12 +41,12 @@ void TLC5947::write(void) {
 void TLC5947::throwOutOfRangeError(const uint16_t& checked, const uint16_t& compared, const char* message, const char* method) {
     if(checked >= compared) {
         std::string report = std::string(message);
-        report += std::string("when calling '") + std::string(method) + std::string("' with ") + std::to_string(checked) + std::endl;
+        report += std::string(" when calling '") + std::string(method) + std::string("' with ") + std::to_string(checked);
         throw std::out_of_range(report);
     }
 }
 
-void TLC5947::setLED(const uint16_t& led, const uint16_t& pwm, const char* method = "setLED") {
+void TLC5947::setLED(const uint16_t& led, const uint16_t& pwm, const char* method) {
     throwOutOfRangeError(led, LEDS * chips_, "LED number must be between [0 and 24 * number of chips)", method);
     throwOutOfRangeError(pwm, MAXPWM, "LED pwm value must be between [0 and 4095)", method);
     buffer_[led] = pwm;
