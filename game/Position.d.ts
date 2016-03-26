@@ -1,14 +1,13 @@
 declare class Position {
-    private static max: number;
-    private static range: Range;
-    private x_: number;
-    private y_: number;
-    public x: number;
-    public y: number;
-    public constructor(x: number, y: number);
-    public toNumber(): number;
-    public static fromNumber(num: number): Position;
-    public static setDirectionMax(max: number): void;
+    private static max_;
+    x: number;
+    y: number;
+    constructor(x: number, y: number);
+    toNumber(): number;
+    isEqual(position: Position): boolean;
+    add(position: Position): Position;
+    sub(position: Position): Position;
+    static fromNumber(num: number): Position;
+    static setDirectionMax(max: number): void;
 }
-
 export = Position;

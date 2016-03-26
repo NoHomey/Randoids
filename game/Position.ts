@@ -1,51 +1,37 @@
-import Range = require("./Range");
-
 class Position {
-    private static max: number;
-    private static range: Range;
-    private x_: number;
-    private y_: number;
+    private static max_: number;
+    public x: number;
+    public y: number;
     
     public constructor(x: number, y: number) {
-        Position.range.tryToThrowOutOfRange(x, "x", "new Position(x, y)");
-        Position.range.tryToThrowOutOfRange(y, "y", "new Position(x, y)");
-        this.x_ = x;
-        this.y_ = y;
-    }
-    
-    public set x(x : number) {
-        Position.range.tryToThrowOutOfRange(x, "x", "set {Position}.x");
-        this.x_ = x;
-    }
-    
-    public set y(y : number) {
-        Position.range.tryToThrowOutOfRange(y, "y", "set {Position}.y");
-        this.y_ = y;
-    }
-    
-    public get x(): number {
-        return this.x_;
-    }
-    
-    public get y(): number {
-        return this.y_;
+        this.x = x;
+        this.y = y;
     }
     
     public toNumber(): number {
-        return this.x_ * Position.max + this.y_;
+        return this.x * Position.max_ + this.y;
+    }
+    
+    public isEqual(position: Position): boolean {
+        return Boolean((this.x === position.x) && (this.y === position.y));
+    }
+    
+    public add(position: Position): Position {
+        return new Position(this.x + position.x, this.y + position.y);
+    }
+    
+    public sub(position: Position): Position {
+        return new Position(this.x - position.x, this.y - position.y);
     }
     
     public static fromNumber(num: number): Position {
-        var range = new Range(0, Position.max * Position.max);
-        range.tryToThrowOutOfRange(num, "num", "Position.fromNumber(num)");
-        var y: number = num % Position.max;
-        var x: number = (num - y) / Position.max;
+        var y: number = num % Position.max_;
+        var x: number = (num - y) / Position.max_;
         return new Position(x, y);
     }
     
     public static setDirectionMax(max: number): void {
-        Position.max = max;
-        Position.range = new Range(0, max - 1);
+        Position.max_ = max;
     }
 }
 

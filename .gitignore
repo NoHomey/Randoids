@@ -1,5 +1,5 @@
-./driver/input/build/*
-./driver/output/build/*
-./driver/wiringPiSetup/build/*
-./game/*.js
-./main.js
+driver/input/build/*
+driver/output/build/*
+driver/wiringPiSetup/build/*
+game/*.js
+main.js

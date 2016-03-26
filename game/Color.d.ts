@@ -1,5 +1,5 @@
 declare module color {
-    enum ColorName {
+    enum Color {
         Black = 0,
         Red = 1,
         Green = 2,
@@ -9,21 +9,6 @@ declare module color {
         Cyan = 6,
         White = 7,
     }
-    
-    class Color {
-        private red_;
-        private green_;
-        private blue_;
-        private name_;
-        private static NumberToBoolean(num);
-        private static BooleanToNumber(bool);
-        public name: ColorName;
-        public red: number;
-        public green: number;
-        public blue: number;
-        public constructor(name: ColorName);
-        public ToUint16Array(): Uint16Array;
-    }
+    function ColorToUint16Array(color: Color): Uint16Array;
 }
-
 export = color;

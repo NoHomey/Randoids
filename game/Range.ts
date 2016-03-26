@@ -8,17 +8,11 @@ class Range {
     }
     
     public isInRange(num: number): boolean {
-        return Boolean(num >= this.from_ && num <= this.to_);
+        return Boolean((num >= this.from_) && (num <= this.to_));
     }
     
     public notInRange(num: number): boolean {
         return !this.isInRange(num);
-    }
-    
-    public tryToThrowOutOfRange(num: number, name: string, what: string): void {
-        if(this.notInRange(num)) {
-            throw new RangeError(`${name} is out of range when calling: ${what} whit: ${name} = ${num}`);
-        }
     }
     
     public range(): number[] {
