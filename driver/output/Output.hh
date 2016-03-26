@@ -10,22 +10,20 @@ namespace output_addon {
     using namespace v8;
     using namespace node;
     
-    class Output : public ObjectWrap {
+    class Output : public ObjectWrap, public TLC5947 {
         public:
             static void Init(Local<Object> exports);
         
         private:
-            explicit Output(const uint8_t& num, const uint16_t& data, const uint16_t& clock, const uint16_t& latch);
+            explicit Output(const uint816_t& chips, const uint8_t& data, const uint8_t& clock, const uint8_t& latch);
             static void New(const FunctionCallbackInfo<Value>& args);
             static void Setup(const FunctionCallbackInfo<Value>& args);
             static void ThrowError(const FunctionCallbackInfo<Value>& args, const std::invalid_argument& error);
             static void Write(const FunctionCallbackInfo<Value>& args);
             static void SetLED(const FunctionCallbackInfo<Value>& args);
-            static void SetLED(Output* obj, const FunctionCallbackInfo<Value>& args, const uint8_t& led, const uint16_t& pwm);
             static void SetRGBLED(const FunctionCallbackInfo<Value>& args);
             static Persistent<Function> constructor;
-            ~Output();
-            TLC5947 tlc5947_;     
+            ~Output();     
     };
 }
 

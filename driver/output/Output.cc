@@ -6,8 +6,8 @@ namespace output_addon {
     
     Persistent<Function> Output::constructor;
     
-    Output::Output(const uint8_t& num, const uint16_t& data, const uint16_t& clock, const uint16_t& latch)
-    : tlc5947_(num, data, clock, latch) {}
+    Output::Output(const uint16_t& chips, const uint8_t& data, const uint8_t& clock, const uint8_t& latch)
+    : TLC5947(chips, data, clock, latch) {}
         
     Output::~Output() {}
     
@@ -25,10 +25,10 @@ namespace output_addon {
     }
     
     void Output::New(const FunctionCallbackInfo<Value>& args) {
-        uint8_t chips = args[0]->ToUint32()->Value();
-        uint16_t data = args[1]->ToUint32()->Value();
-        uint16_t clock = args[2]->ToUint32()->Value();
-        uint16_t latch = args[3]->ToUint32()->Value();
+        uint16_t chips = args[0]->ToUint32()->Value();
+        uint8_t data = args[1]->ToUint32()->Value();
+        uint8_t clock = args[2]->ToUint32()->Value();
+        uint8_t latch = args[3]->ToUint32()->Value();
         //char* wire = *(String::Utf8Value(args[4]->ToString()));
         Output* obj = new Output(chips, data, clock, latch);
         obj->Wrap(args.This());
@@ -37,7 +37,7 @@ namespace output_addon {
     
     void Output::Setup(const FunctionCallbackInfo<Value>& args) {
         Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
-        obj->tlc5947_.setup();
+        obj->setup();
     }
     
     void Output::ThrowError(const FunctionCallbackInfo<Value>& args, const invalid_argument& error) {
@@ -47,7 +47,7 @@ namespace output_addon {
     
     void Output::Write(const FunctionCallbackInfo<Value>& args) {
         Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
-        obj->tlc5947_.write();
+        obj->write();
     }
     
     void Output::SetLED(const FunctionCallbackInfo<Value>& args) {
@@ -55,7 +55,7 @@ namespace output_addon {
             uint16_t led = args[0]->ToUint32()->Value();
             uint16_t pwm = args[1]->ToUint32()->Value();
             Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
-            obj->tlc5947_.setLED(led, pwm);
+            obj->setLED(led, pwm);
         } catch (const invalid_argument& error) {
             ThrowError(args, error);
         }
@@ -70,7 +70,7 @@ namespace output_addon {
             for(uint8_t i = 0; i < 3; ++i) {
                 pwm[i] = array->Get(i)->ToUint32()->Value();
             }
-            obj->tlc5947_.setRGBLED(rgb, pwm);
+            obj->setRGBLED(rgb, pwm);
         } catch (const invalid_argument& error) {
             ThrowError(args, error);
         }
