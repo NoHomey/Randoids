@@ -10,10 +10,10 @@ wiringPiSetup:
 	cd driver/wiringPiSetup && make
 
 transpile:
-	tsc -m commonjs main.ts
+	tsc
 
 run:
 	node main.js
     
 clean:
-	rm -Rf ./driver/*/build main.js
+	rm -Rf ./driver/*/build main.js ./game/*.js

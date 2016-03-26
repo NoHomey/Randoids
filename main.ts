@@ -1,4 +1,4 @@
-import wiringPiSetup = require('./driver/wiringPiSetup/wiringPiSetup');
+/*import wiringPiSetup = require('./driver/wiringPiSetup/wiringPiSetup');
 import output = require('./driver/output/output');
 import input = require('./driver/input/input');
 
@@ -23,4 +23,10 @@ setTimeout(() => {
     out.write();   
 },1000)
 
-var buttons: number = input();
+var buttons: number = input();*/
+
+import Position = require('./game/Position');
+Position.setDirectionMax(8);
+
+var p: Position = new Position(1, 2);
+p.x = 8;
