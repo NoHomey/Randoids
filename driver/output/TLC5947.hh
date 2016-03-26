@@ -14,7 +14,7 @@ class TLC5947 {
   
     private:
         static void throwError(const uint16_t& checked, const uint16_t& compared, const char* message);
-        const uint16_t& chips_;
+        const uint16_t chips_;
         uint16_t *buffer_;
         const uint8_t data_;
         const uint8_t clock_;

@@ -6,7 +6,7 @@
 #define MAXPWM 4095
 
 TLC5947::TLC5947(const uint16_t& chips, const uint8_t& data, const uint8_t& clock, const uint8_t& latch)
-: chips_(chips), buffer_(new uint16_t[num * LEDS]), data_(data), clock_(clock), latch_(latch)
+: chips_(chips), buffer_(new uint16_t[chips * LEDS]), data_(data), clock_(clock), latch_(latch)
 {}
 
 void TLC5947::throwError(const uint16_t& checked, const uint16_t& compared, const char* message) {
