@@ -15,11 +15,13 @@ namespace output_addon {
         Isolate* isolate = exports->GetIsolate();
         Local<FunctionTemplate> tmpl = FunctionTemplate::New(isolate, New);
         tmpl->SetClassName(String::NewFromUtf8(isolate, "Output"));
-        tmpl->InstanceTemplate()->SetInternalFieldCount(4);
+        tmpl->InstanceTemplate()->SetInternalFieldCount(6);
         NODE_SET_PROTOTYPE_METHOD(tmpl, "setup", Setup);
         NODE_SET_PROTOTYPE_METHOD(tmpl, "write", Write);
         NODE_SET_PROTOTYPE_METHOD(tmpl, "setLED", SetLED);
         NODE_SET_PROTOTYPE_METHOD(tmpl, "setRGBLED", SetRGBLED);
+        NODE_SET_PROTOTYPE_METHOD(tmpl, "clearLED", ClearLED);
+        NODE_SET_PROTOTYPE_METHOD(tmpl, "clearRGBLED", ClearRGBLED);
         constructor.Reset(isolate, tmpl->GetFunction());
         exports->Set(String::NewFromUtf8(isolate, "Output"), tmpl->GetFunction());
     }
@@ -29,15 +31,10 @@ namespace output_addon {
         uint8_t data = args[1]->ToUint32()->Value();
         uint8_t clock = args[2]->ToUint32()->Value();
         uint8_t latch = args[3]->ToUint32()->Value();
-	String::Utf8Value utf8(args[4]->ToString());
+        String::Utf8Value utf8(args[4]->ToString());
         Output* obj = new Output(chips, data, clock, latch, *utf8);
         obj->Wrap(args.This());
         args.GetReturnValue().Set(args.This());
-    }
-    
-    void Output::Setup(const FunctionCallbackInfo<Value>& args) {
-        Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
-        obj->setup();
     }
     
     void Output::ThrowError(const FunctionCallbackInfo<Value>& args, const out_of_range& error) {
@@ -71,6 +68,26 @@ namespace output_addon {
                 pwm[i] = array->Get(i)->ToUint32()->Value();
             }
             obj->setRGBLED(rgb, pwm);
+        } catch (const out_of_range& error) {
+            ThrowError(args, error);
+        }
+    }
+    
+    void Output::ClearLED(const FunctionCallbackInfo<Value>& args) {
+         try {
+            uint16_t led = args[0]->ToUint32()->Value();
+            Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
+            obj->clearLED(led);
+        } catch (const out_of_range& error) {
+            ThrowError(args, error);
+        }
+    }
+    
+    void Output::ClearRGBLED(const FunctionCallbackInfo<Value>& args) {
+         try {
+            uint16_t rgb = args[0]->ToUint32()->Value();
+            Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
+            obj->clearRGBLED(rgb);
         } catch (const out_of_range& error) {
             ThrowError(args, error);
         }

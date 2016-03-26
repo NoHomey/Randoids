@@ -17,11 +17,12 @@ namespace output_addon {
         private:
             explicit Output(const uint8_t& chips, const uint8_t& data, const uint8_t& clock, const uint8_t& latch, const char* wiring);
             static void New(const FunctionCallbackInfo<Value>& args);
-            static void Setup(const FunctionCallbackInfo<Value>& args);
             static void ThrowError(const FunctionCallbackInfo<Value>& args, const std::out_of_range& error);
             static void Write(const FunctionCallbackInfo<Value>& args);
             static void SetLED(const FunctionCallbackInfo<Value>& args);
             static void SetRGBLED(const FunctionCallbackInfo<Value>& args);
+            static void ClearLED(const FunctionCallbackInfo<Value>& args);
+            static void ClearRGBLED(const FunctionCallbackInfo<Value>& args);
             static Persistent<Function> constructor;
             ~Output();     
     };
