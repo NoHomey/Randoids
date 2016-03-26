@@ -9,8 +9,6 @@ class TLC5947 {
         ~TLC5947(void);
         void setLED(const uint16_t& led, const uint16_t& pwm, const char* method = "setLED");
         void setRGBLED(const uint16_t& rgb, const uint16_t* pwm, const char* method = "setRGBLED");
-        void clearLED(const uint16_t& led, const char* method = "clearLED");
-        void clearRGBLED(const uint16_t& rgb, const char* method = "clearRGBLED");
         void write(void);
 
     private:

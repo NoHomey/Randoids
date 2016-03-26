@@ -45,17 +45,13 @@ function readInput(): Position {
     return new Position(x, 0);
 }
 
-function move(object: GameObject) {
-    for(var i: number = 0; i < object.figure.length; ++i) {
-        var old: Position = object.figure[i].position.add(object.position);
-        out.clearRGBLED(old.toNumber());
-    }
+function update(object: GainNode, clear: boolean) {
     var updated: Pixel[] = object.progress(object.position);
     for(var i: number = 0; i < updated.length; ++i) {
         var pixel: number = updated[i].position.toNumber();
         console.log(pixel);
-        screen[pixel] = updated[i].color;
-    }
+        screen[pixel] = clear ? color.Color.Black : updated[i].color;
+    }  
 }
 
 function clearScreen(): void {
@@ -66,14 +62,13 @@ function clearScreen(): void {
 }
 
 clearScreen();
-move(player);
+update(player, false);
 updateScreen();
 
 setInterval(() => {
     player.direction = readInput();
-    player.position.add(player.direction);
-    move(player);
+    update(player, true);
+    player.position = player.position.add(player.direction);
+    update(player, false);
     updateScreen();
 }, 1000);
-
-

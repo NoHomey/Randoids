@@ -15,12 +15,10 @@ namespace output_addon {
         Isolate* isolate = exports->GetIsolate();
         Local<FunctionTemplate> tmpl = FunctionTemplate::New(isolate, New);
         tmpl->SetClassName(String::NewFromUtf8(isolate, "Output"));
-        tmpl->InstanceTemplate()->SetInternalFieldCount(5);
+        tmpl->InstanceTemplate()->SetInternalFieldCount(3);
         NODE_SET_PROTOTYPE_METHOD(tmpl, "write", Write);
         NODE_SET_PROTOTYPE_METHOD(tmpl, "setLED", SetLED);
         NODE_SET_PROTOTYPE_METHOD(tmpl, "setRGBLED", SetRGBLED);
-        NODE_SET_PROTOTYPE_METHOD(tmpl, "clearLED", ClearLED);
-        NODE_SET_PROTOTYPE_METHOD(tmpl, "clearRGBLED", ClearRGBLED);
         constructor.Reset(isolate, tmpl->GetFunction());
         exports->Set(String::NewFromUtf8(isolate, "Output"), tmpl->GetFunction());
     }
@@ -67,26 +65,6 @@ namespace output_addon {
                 pwm[i] = array->Get(i)->ToUint32()->Value();
             }
             obj->setRGBLED(rgb, pwm);
-        } catch (const out_of_range& error) {
-            ThrowError(args, error);
-        }
-    }
-    
-    void Output::ClearLED(const FunctionCallbackInfo<Value>& args) {
-         try {
-            uint16_t led = args[0]->ToUint32()->Value();
-            Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
-            obj->clearLED(led);
-        } catch (const out_of_range& error) {
-            ThrowError(args, error);
-        }
-    }
-    
-    void Output::ClearRGBLED(const FunctionCallbackInfo<Value>& args) {
-         try {
-            uint16_t rgb = args[0]->ToUint32()->Value();
-            Output* obj = ObjectWrap::Unwrap<Output>(args.Holder());
-            obj->clearRGBLED(rgb);
         } catch (const out_of_range& error) {
             ThrowError(args, error);
         }

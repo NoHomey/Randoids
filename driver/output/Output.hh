@@ -21,8 +21,6 @@ namespace output_addon {
             static void Write(const FunctionCallbackInfo<Value>& args);
             static void SetLED(const FunctionCallbackInfo<Value>& args);
             static void SetRGBLED(const FunctionCallbackInfo<Value>& args);
-            static void ClearLED(const FunctionCallbackInfo<Value>& args);
-            static void ClearRGBLED(const FunctionCallbackInfo<Value>& args);
             static Persistent<Function> constructor;
             ~Output();     
     };

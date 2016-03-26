@@ -63,19 +63,10 @@ void TLC5947::setLED(const uint16_t& led, const uint16_t& pwm, const char* metho
     buffer_[led] = pwm;
 }
 
-void TLC5947::clearLED(const uint16_t& led, const char* method) {
-    setLED(led, 0, method);
-}
-
 void TLC5947::setRGBLED(const uint16_t& rgb, const uint16_t* pwm, const char* method) {
     throwOutOfRangeError(rgb, LEDS * chips_ / 3, "RGB number must be between [0 and 8 * number of chips)", method);
     uint16_t led = rgb * 3;
     setLED(led + wiring_.red, pwm[0], method);
     setLED(led + wiring_.green, pwm[1], method);
     setLED(led + wiring_.blue, pwm[2], method);
-}
-
-void TLC5947::clearRGBLED(const uint16_t& rgb, const char* method) {
-    const uint16_t pwm[3] = {0, 0, 0};
-    setRGBLED(rgb, pwm, method);
 }

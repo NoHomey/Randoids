@@ -4,8 +4,6 @@ declare module output {
         write(): void;
         setLED(led: number, pwm: number): void;
         setRGBLED(rgb:number, pwm: Uint16Array): void;
-        clearLED(led: number): void;
-        clearRGBLED(rgb: number): void;
     }
 }
 
